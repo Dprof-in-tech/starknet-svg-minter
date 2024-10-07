@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { Contract } from "starknet";
+// import { Contract } from "starknet";
 import { useAccount, useDisconnect } from "@starknet-react/core";
 import { CallData, byteArray } from "starknet";
-import wescotABI from "../abi/wescot.abi.json";
+// import wescotABI from "../abi/wescot.abi.json";
 
 const contractAddress =
   "0x029c4a89d43d618d62d0b0aab56ac0f0f5124b692ee2c0428eee29d0e0e97ff2";
-const abi = wescotABI;
+// const abi = wescotABI;
 
 const Wescot: React.FC = () => {
   const [svgData, setSvgData] = useState<string>("");
@@ -63,7 +63,7 @@ const Wescot: React.FC = () => {
     setTransactionHash(null);
 
     try {
-      const contract = new Contract(abi, contractAddress, account);
+      //   const contract = new Contract(abi, contractAddress, account);
 
       // Build the full metadata
       const metadata = buildMetadata(name, description, svgData);
