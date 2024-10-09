@@ -1,13 +1,10 @@
 "use client";
 import React, { useState } from "react";
-// import { Contract } from "starknet";
 import { useAccount, useDisconnect } from "@starknet-react/core";
 import { CallData, byteArray } from "starknet";
-// import wescotABI from "../abi/wescot.abi.json";
 
 const contractAddress =
   "0x029c4a89d43d618d62d0b0aab56ac0f0f5124b692ee2c0428eee29d0e0e97ff2";
-// const abi = wescotABI;
 
 const Wescot: React.FC = () => {
   const [svgData, setSvgData] = useState<string>("");
@@ -20,24 +17,19 @@ const Wescot: React.FC = () => {
   const { account, address, status } = useAccount();
   const { disconnect } = useDisconnect();
 
-  const encodeURIComponent = (str: string) => {
-    return str.replace(/[\u00A0-\u9999<>&]/gim, function (i) {
-      return "&#" + i.charCodeAt(0) + ";";
-    });
-  };
-
   const buildMetadata = (
     name: string,
     description: string,
     svgData: string
   ): string => {
-    const svgDataUri = `data:application/json,${encodeURIComponent(svgData)}`;
-    const metadata = {
-      name,
-      description,
-      image: svgDataUri,
-    };
-    return JSON.stringify(metadata);
+    // Replace double quotes with single quotes in SVG data
+    const processedSvgData = svgData.replace(/"/g, "'");
+
+    // Ensure that the < and > characters are not escaped
+    const innerJson = `{"name":"${name}","description":"${description}","image":"data:image/svg+xml,${processedSvgData}"}`;
+    const outerJson = `data:application/json,{"name":"P5 Mint","description":"Generative Art.","image":"data:image/svg+xml,${innerJson}"}`;
+
+    return outerJson;
   };
 
   function stringToByteArray(val: string) {
@@ -63,12 +55,7 @@ const Wescot: React.FC = () => {
     setTransactionHash(null);
 
     try {
-      //   const contract = new Contract(abi, contractAddress, account);
-
-      // Build the full metadata
       const metadata = buildMetadata(name, description, svgData);
-
-      // Convert the metadata to calldata
       const calldataString = stringToByteArray(metadata);
       const calldata = calldataString.split(",");
 
