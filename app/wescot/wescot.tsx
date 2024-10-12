@@ -22,14 +22,11 @@ const Wescot: React.FC = () => {
     description: string,
     svgData: string
   ): string => {
-    // Replace double quotes with single quotes in SVG data
     const processedSvgData = svgData.replace(/"/g, "'");
 
-    // Ensure that the < and > characters are not escaped
     const innerJson = `{"name":"${name}","description":"${description}","image":"data:image/svg+xml,${processedSvgData}"}`;
-    const outerJson = `data:application/json,{"name":"P5 Mint","description":"Generative Art.","image":"data:image/svg+xml,${innerJson}"}`;
 
-    return outerJson;
+    return innerJson.replace(/"/g, '\\"');
   };
 
   function stringToByteArray(val: string) {
